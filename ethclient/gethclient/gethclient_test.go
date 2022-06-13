@@ -276,7 +276,7 @@ func testSubscribePendingTransactions(t *testing.T, client *rpc.Client) {
 		t.Fatal(err)
 	}
 	// Create transaction
-	tx := types.NewTransaction(0, common.Address{1}, big.NewInt(1), 22000, big.NewInt(1), nil, nil)
+	tx := types.NewTransaction(0, common.Address{1}, big.NewInt(1), 22000, big.NewInt(1), nil)
 	signer := types.LatestSignerForChainID(chainID)
 	signature, err := crypto.Sign(signer.Hash(tx).Bytes(), testKey)
 	if err != nil {
@@ -306,7 +306,6 @@ func testCallContract(t *testing.T, client *rpc.Client) {
 		Gas:      21000,
 		GasPrice: big.NewInt(1000000000),
 		Value:    big.NewInt(1),
-		NewField: nil,
 	}
 	// CallContract without override
 	if _, err := ec.CallContract(context.Background(), msg, big.NewInt(0), nil); err != nil {

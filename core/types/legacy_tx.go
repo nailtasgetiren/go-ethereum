@@ -31,12 +31,11 @@ type LegacyTx struct {
 	Value    *big.Int        // wei amount
 	Data     []byte          // contract invocation input data
 	V, R, S  *big.Int        // signature values
-	NewField *big.Int
 }
 
 // NewTransaction creates an unsigned legacy transaction.
 // Deprecated: use NewTx instead.
-func NewTransaction(nonce uint64, to common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte, newField *big.Int) *Transaction {
+func NewTransaction(nonce uint64, to common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) *Transaction {
 	return NewTx(&LegacyTx{
 		Nonce:    nonce,
 		To:       &to,
@@ -44,20 +43,18 @@ func NewTransaction(nonce uint64, to common.Address, amount *big.Int, gasLimit u
 		Gas:      gasLimit,
 		GasPrice: gasPrice,
 		Data:     data,
-		NewField: newField,
 	})
 }
 
 // NewContractCreation creates an unsigned legacy transaction.
 // Deprecated: use NewTx instead.
-func NewContractCreation(nonce uint64, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte, newField *big.Int) *Transaction {
+func NewContractCreation(nonce uint64, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) *Transaction {
 	return NewTx(&LegacyTx{
 		Nonce:    nonce,
 		Value:    amount,
 		Gas:      gasLimit,
 		GasPrice: gasPrice,
 		Data:     data,
-		NewField: newField,
 	})
 }
 
@@ -74,7 +71,6 @@ func (tx *LegacyTx) copy() TxData {
 		V:        new(big.Int),
 		R:        new(big.Int),
 		S:        new(big.Int),
-		NewField: new(big.Int),
 	}
 	if tx.Value != nil {
 		cpy.Value.Set(tx.Value)
@@ -91,9 +87,6 @@ func (tx *LegacyTx) copy() TxData {
 	if tx.S != nil {
 		cpy.S.Set(tx.S)
 	}
-	if tx.NewField != nil {
-		cpy.NewField.Set(tx.NewField)
-	}
 	return cpy
 }
 
@@ -106,7 +99,6 @@ func (tx *LegacyTx) gas() uint64            { return tx.Gas }
 func (tx *LegacyTx) gasPrice() *big.Int     { return tx.GasPrice }
 func (tx *LegacyTx) gasTipCap() *big.Int    { return tx.GasPrice }
 func (tx *LegacyTx) gasFeeCap() *big.Int    { return tx.GasPrice }
-func (tx *LegacyTx) newField() *big.Int     { return tx.NewField }
 func (tx *LegacyTx) value() *big.Int        { return tx.Value }
 func (tx *LegacyTx) nonce() uint64          { return tx.Nonce }
 func (tx *LegacyTx) to() *common.Address    { return tx.To }
