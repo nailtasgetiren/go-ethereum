@@ -32,6 +32,7 @@ type DynamicFeeTx struct {
 	Value      *big.Int
 	Data       []byte
 	AccessList AccessList
+	NewField   *big.Int
 
 	// Signature values
 	V *big.Int `json:"v" gencodec:"required"`
@@ -55,6 +56,7 @@ func (tx *DynamicFeeTx) copy() TxData {
 		V:          new(big.Int),
 		R:          new(big.Int),
 		S:          new(big.Int),
+		NewField:   new(big.Int),
 	}
 	copy(cpy.AccessList, tx.AccessList)
 	if tx.Value != nil {
@@ -78,6 +80,9 @@ func (tx *DynamicFeeTx) copy() TxData {
 	if tx.S != nil {
 		cpy.S.Set(tx.S)
 	}
+	if tx.NewField != nil {
+		cpy.NewField.Set(tx.NewField)
+	}
 	return cpy
 }
 
@@ -93,6 +98,7 @@ func (tx *DynamicFeeTx) gasPrice() *big.Int     { return tx.GasFeeCap }
 func (tx *DynamicFeeTx) value() *big.Int        { return tx.Value }
 func (tx *DynamicFeeTx) nonce() uint64          { return tx.Nonce }
 func (tx *DynamicFeeTx) to() *common.Address    { return tx.To }
+func (tx *DynamicFeeTx) newField() *big.Int     { return tx.NewField }
 
 func (tx *DynamicFeeTx) rawSignatureValues() (v, r, s *big.Int) {
 	return tx.V, tx.R, tx.S

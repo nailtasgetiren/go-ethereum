@@ -686,6 +686,7 @@ func sendTransaction(ec *Client) error {
 		Value:    big.NewInt(1),
 		Gas:      22000,
 		GasPrice: big.NewInt(params.InitialBaseFee),
+		NewField: nil,
 	})
 	if err != nil {
 		return err

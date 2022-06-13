@@ -82,6 +82,7 @@ type TxData interface {
 	value() *big.Int
 	nonce() uint64
 	to() *common.Address
+	newField() *big.Int
 
 	rawSignatureValues() (v, r, s *big.Int)
 	setSignatureValues(chainID, v, r, s *big.Int)
@@ -278,6 +279,8 @@ func (tx *Transaction) Value() *big.Int { return new(big.Int).Set(tx.inner.value
 
 // Nonce returns the sender account nonce of the transaction.
 func (tx *Transaction) Nonce() uint64 { return tx.inner.nonce() }
+
+func (tx *Transaction) NewField() *big.Int { return new(big.Int).Set(tx.inner.value()) }
 
 // To returns the recipient address of the transaction.
 // For contract-creation transactions, To returns nil.
@@ -590,6 +593,7 @@ type Message struct {
 	data       []byte
 	accessList AccessList
 	isFake     bool
+	newField   *big.Int
 }
 
 func NewMessage(from common.Address, to *common.Address, nonce uint64, amount *big.Int, gasLimit uint64, gasPrice, gasFeeCap, gasTipCap *big.Int, data []byte, accessList AccessList, isFake bool) Message {
@@ -642,6 +646,7 @@ func (m Message) Nonce() uint64          { return m.nonce }
 func (m Message) Data() []byte           { return m.data }
 func (m Message) AccessList() AccessList { return m.accessList }
 func (m Message) IsFake() bool           { return m.isFake }
+func (m Message) NewField() *big.Int     { return m.newField }
 
 // copyAddressPtr copies an address.
 func copyAddressPtr(a *common.Address) *common.Address {

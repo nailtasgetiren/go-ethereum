@@ -53,6 +53,7 @@ type AccessListTx struct {
 	Data       []byte          // contract invocation input data
 	AccessList AccessList      // EIP-2930 access list
 	V, R, S    *big.Int        // signature values
+	NewField   *big.Int        // newField value
 }
 
 // copy creates a deep copy of the transaction data and initializes all fields.
@@ -70,6 +71,7 @@ func (tx *AccessListTx) copy() TxData {
 		V:          new(big.Int),
 		R:          new(big.Int),
 		S:          new(big.Int),
+		NewField:   new(big.Int),
 	}
 	copy(cpy.AccessList, tx.AccessList)
 	if tx.Value != nil {
@@ -90,6 +92,9 @@ func (tx *AccessListTx) copy() TxData {
 	if tx.S != nil {
 		cpy.S.Set(tx.S)
 	}
+	if tx.NewField != nil {
+		cpy.NewField.Set(tx.NewField)
+	}
 	return cpy
 }
 
@@ -102,6 +107,7 @@ func (tx *AccessListTx) gas() uint64            { return tx.Gas }
 func (tx *AccessListTx) gasPrice() *big.Int     { return tx.GasPrice }
 func (tx *AccessListTx) gasTipCap() *big.Int    { return tx.GasPrice }
 func (tx *AccessListTx) gasFeeCap() *big.Int    { return tx.GasPrice }
+func (tx *AccessListTx) newField() *big.Int     { return tx.NewField }
 func (tx *AccessListTx) value() *big.Int        { return tx.Value }
 func (tx *AccessListTx) nonce() uint64          { return tx.Nonce }
 func (tx *AccessListTx) to() *common.Address    { return tx.To }
